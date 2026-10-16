@@ -1,0 +1,9 @@
+.DS_Store
+Thumbs.db
+db.json
+*.log
+node_modules/
+node_modules_pnpm_old/
+public/
+.deploy*/
+_multiconfig.yml
