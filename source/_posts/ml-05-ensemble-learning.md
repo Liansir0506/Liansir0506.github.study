@@ -7,9 +7,6 @@ categories:
 tags:
   - 集成学习
   - 随机森林
-  - Bagging
-  - Boosting
-  - AdaBoost
 description: 一棵树不够稳，那就种一片森林。讲清 Bagging 与 Boosting 两条路线，附面试必答对比表
 mathjax: true
 ---

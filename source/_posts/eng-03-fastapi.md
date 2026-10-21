@@ -6,8 +6,6 @@ categories:
   - AI 工程化
 tags:
   - FastAPI
-  - WebAPI
-  - Pydantic
   - 异步
 description: 从 URL/方法/状态码讲到路由、Pydantic 校验、自动文档和异步——把大模型包装成别人能调用的服务
 mathjax: true

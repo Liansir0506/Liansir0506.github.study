@@ -6,9 +6,6 @@ categories:
   - Coze 智能体
 tags:
   - 多模态
-  - 循环
-  - 批处理
-  - 语音
 description: 让 Bot 能看会听、让它能批量干活——多模态输入与循环结构怎么用
 mathjax: true
 ---

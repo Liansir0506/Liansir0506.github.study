@@ -6,9 +6,6 @@ categories:
   - 投满分 NLP 项目
 tags:
   - 模型压缩
-  - 低秩分解
-  - 量化
-  - 知识蒸馏
 description: 效果好但跑不动的模型没有价值——量化、剪枝、蒸馏、低秩分解，四种瘦身术怎么选
 mathjax: true
 ---

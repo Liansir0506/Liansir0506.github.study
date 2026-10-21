@@ -5,9 +5,7 @@ categories:
   - 工程篇
   - AI 工程化
 tags:
-  - CICD
-  - GitHubActions
-  - 自动化部署
+  - CI/CD
 description: 从"手工上线手抖"到"推送即发布"——流水线五要素、GitHub Actions 实战（这个博客就是活例子）
 mathjax: true
 ---

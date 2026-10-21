@@ -6,9 +6,7 @@ categories:
   - RAG 问答系统
 tags:
   - 知识库治理
-  - 版本管理
-  - 增量更新
-  - 质量门禁
+  - 质量评测
 description: 知识是活的——入库管道、kb_version 版本、灰度激活与回滚，让"知识库更新"变成可控动作
 mathjax: true
 ---

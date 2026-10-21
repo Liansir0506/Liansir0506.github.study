@@ -6,9 +6,6 @@ categories:
   - AI 工程化
 tags:
   - Docker
-  - 容器
-  - Dockerfile
-  - Compose
 description: 镜像和容器的关系、Dockerfile 多阶段构建、Compose 一键起多个服务——解决"在我电脑上能跑"
 mathjax: true
 ---

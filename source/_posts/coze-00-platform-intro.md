@@ -6,9 +6,7 @@ categories:
   - Coze 智能体
 tags:
   - Coze
-  - Bot
-  - 低代码
-  - 智能体
+  - Agent
 description: Coze 是什么、五大核心概念怎么对应前面学的知识、第一个 Bot 怎么搭、什么时候该用低代码平台
 mathjax: true
 ---

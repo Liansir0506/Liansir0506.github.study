@@ -5,7 +5,7 @@ categories:
   - 项目篇
   - RAG 问答系统
 tags:
-  - 最小RAG
+  - RAG
   - 混合检索
   - Reranker
   - VibeCoding

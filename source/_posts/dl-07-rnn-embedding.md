@@ -6,7 +6,6 @@ categories:
   - 深度学习
 tags:
   - RNN
-  - 词嵌入
   - Embedding
   - 文本生成
 description: 词嵌入怎么把词变成向量、RNN 怎么记住上下文，以及周杰伦歌词生成——"预测下一个词"正是大模型的训练方式

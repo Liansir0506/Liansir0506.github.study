@@ -7,8 +7,7 @@ categories:
 tags:
   - 项目架构
   - 多Agent
-  - 数据准备
-  - 部署架构
+  - 部署
 description: 从业务架构到代码架构——3 个 A2A Agent、2 个 MCP 服务、一个记忆中枢，以及从零构建的七步流程
 mathjax: true
 ---

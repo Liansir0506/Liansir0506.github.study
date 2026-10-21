@@ -6,8 +6,6 @@ categories:
   - AI 工程化
 tags:
   - VibeCoding
-  - AI编程
-  - CLAUDE.md
   - 提示词
 description: 'AI 是快的实习生，你是负责的工程师——五步循环、提示词四要素、CLAUDE.md 配置，让 AI 真正成为你的生产力'
 mathjax: true

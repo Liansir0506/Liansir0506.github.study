@@ -5,10 +5,8 @@ categories:
   - 应用篇
   - Coze 智能体
 tags:
-  - Multi-Agent
-  - 主从模式
-  - Agent架构
-  - 任务分发
+  - 多Agent
+  - 项目架构
 description: 单 Agent 为什么扛不住复杂业务、父子 Agent 怎么分工、三种节点怎么选——Agent 架构设计的入门
 mathjax: true
 ---

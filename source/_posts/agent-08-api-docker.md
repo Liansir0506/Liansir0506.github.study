@@ -5,10 +5,7 @@ categories:
   - 项目篇
   - 智慧旅游 Agent
 tags:
-  - API对接
   - Docker
-  - 和风天气
-  - 高德地图
   - 部署
 description: 四个外部 API 的对接要点、鉴权与限流、Compose 编排全部服务——把整个多 Agent 系统跑起来
 mathjax: true

@@ -7,8 +7,6 @@ categories:
 tags:
   - ngram
   - RNN
-  - LSTM
-  - GRU
 description: 统计语言模型 ngram 的局限、PyTorch 里 RNN/LSTM/GRU 的用法与形状——以及为什么它们最终被 Transformer 取代
 mathjax: true
 ---

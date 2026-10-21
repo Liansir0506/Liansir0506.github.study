@@ -7,8 +7,6 @@ categories:
 tags:
   - ReAct
   - Agent
-  - Thought
-  - Action
 description: Thought→Action→Observation 循环怎么跑、代码怎么实现、为什么它是 Agent 的核心范式
 mathjax: true
 ---

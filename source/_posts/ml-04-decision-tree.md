@@ -6,8 +6,6 @@ categories:
   - 机器学习
 tags:
   - 决策树
-  - Gini系数
-  - 剪枝
   - one-hot编码
 description: 从"银行批贷款"理解决策树的判断逻辑，讲清 Gini、剪枝、one-hot 编码，再用泰坦尼克号走一遍完整流程
 mathjax: true

@@ -7,8 +7,7 @@ categories:
 tags:
   - 文本分类
   - 项目架构
-  - 方案对比
-  - 今日头条
+  - 项目实战
 description: 同一个文本分类任务，用随机森林、fasttext、BERT 微调、LLM 提示词四种路线解决——这才是"技术选型"的真实样子
 mathjax: true
 ---

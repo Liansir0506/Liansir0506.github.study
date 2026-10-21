@@ -5,8 +5,7 @@ categories:
   - 项目篇
   - 智慧旅游 Agent
 tags:
-  - FunctionCall
-  - JSONSchema
+  - Function Calling
   - 工具调用
 description: 从工具定义到调用回填，再看手写 Schema 的三个痛点——这就是 MCP 要解决的事
 mathjax: true

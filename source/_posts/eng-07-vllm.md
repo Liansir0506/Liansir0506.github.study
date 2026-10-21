@@ -6,9 +6,7 @@ categories:
   - AI 工程化
 tags:
   - vLLM
-  - 私有化部署
-  - 推理引擎
-  - PagedAttention
+  - 部署
 description: 为什么要自己部署模型、推理和训练的区别、vLLM 凭什么快、Docker 起一个 OpenAI 兼容服务
 mathjax: true
 ---

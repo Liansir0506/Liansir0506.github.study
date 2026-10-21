@@ -6,7 +6,6 @@ categories:
   - 深度学习
 tags:
   - 自动微分
-  - autograd
   - 反向传播
   - 梯度下降
 description: requires_grad、backward、梯度累积的坑、detach、链式法则——理解这套机制，才算真正入门 PyTorch
@@ -130,6 +129,46 @@ $$\frac{\partial L}{\partial w_1} = \frac{\partial L}{\partial a_2} \cdot \frac{
 - 从输出层往输入层**逐层倒推**
 - 每一步只需要求"本层"的局部导数，再乘上从后面传来的梯度
 - 这就是为什么叫**反向**传播
+
+<svg class="lm-diagram" viewBox="0 0 720 270" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>前向计算与反向传播的计算图</title>
+  <defs>
+    <marker id="dArrB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#49b1f5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="dArrR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#e24b4a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <text x="90" y="36" class="d-accent-ink">前向计算（算损失）</text>
+  <text x="560" y="36" class="d-sub" fill="#e24b4a">反向传播（算梯度）</text>
+  <rect x="40" y="70" width="72" height="44" rx="8" class="d-box"/>
+  <text x="76" y="97" class="d-ink" text-anchor="middle">x</text>
+  <rect x="212" y="70" width="72" height="44" rx="8" class="d-box"/>
+  <text x="248" y="90" class="d-ink" text-anchor="middle">z₁</text>
+  <text x="248" y="106" class="d-sub" text-anchor="middle">x·w₁</text>
+  <rect x="384" y="70" width="72" height="44" rx="8" class="d-box"/>
+  <text x="420" y="90" class="d-ink" text-anchor="middle">a₁</text>
+  <text x="420" y="106" class="d-sub" text-anchor="middle">sigmoid</text>
+  <rect x="556" y="70" width="72" height="44" rx="8" class="d-box"/>
+  <text x="592" y="90" class="d-ink" text-anchor="middle">z₂</text>
+  <text x="592" y="106" class="d-sub" text-anchor="middle">a₁·w₂</text>
+  <rect x="556" y="160" width="72" height="44" rx="8" class="d-box-soft"/>
+  <text x="592" y="187" class="d-accent-ink" text-anchor="middle">Loss</text>
+  <line x1="112" y1="92" x2="206" y2="92" class="d-flow" marker-end="url(#dArrB)"/>
+  <line x1="284" y1="92" x2="378" y2="92" class="d-flow" marker-end="url(#dArrB)"/>
+  <line x1="456" y1="92" x2="550" y2="92" class="d-flow" marker-end="url(#dArrB)"/>
+  <path d="M 592 114 L 592 148" class="d-flow" marker-end="url(#dArrB)"/>
+  <line x1="550" y1="182" x2="462" y2="182" class="d-flow-back" marker-end="url(#dArrR)"/>
+  <line x1="378" y1="182" x2="290" y2="182" class="d-flow-back" marker-end="url(#dArrR)"/>
+  <line x1="206" y1="182" x2="118" y2="182" class="d-flow-back" marker-end="url(#dArrR)"/>
+  <path d="M 76 160 L 76 118" class="d-flow-back" marker-end="url(#dArrR)"/>
+  <text x="500" y="208" class="d-sub" fill="#e24b4a">∂L/∂z₂</text>
+  <text x="334" y="208" class="d-sub" fill="#e24b4a">∂L/∂a₁</text>
+  <text x="162" y="208" class="d-sub" fill="#e24b4a">∂L/∂x</text>
+  <text x="360" y="248" class="d-sub" text-anchor="middle">链式法则：∂L/∂w₁ = ∂L/∂a₂ · ∂a₂/∂z₂ · ∂z₂/∂a₁ · ∂a₁/∂z₁ · ∂z₁/∂w₁（局部导数连乘）</text>
+</svg>
+<p class="lm-diagram-cap">图 2 · 前向算出损失，反向把梯度一层层传回去——PyTorch 的 autograd 就是把这张图自动建出来、自动求导</p>
 
 > 📌 面试答法："反向传播本质是链式法则；从损失出发，逐层反向计算局部梯度并相乘，得到每个参数的梯度。PyTorch 的 autograd 通过构建计算图自动完成这件事。"
 

@@ -7,8 +7,6 @@ categories:
 tags:
   - PyTorch
   - 张量
-  - 张量运算
-  - 形状变换
 description: 张量的创建、运算、索引、形状变换与拼接——把这一篇当 PyTorch 的速查手册用
 mathjax: true
 ---

@@ -5,10 +5,7 @@ categories:
   - 项目篇
   - RAG 问答系统
 tags:
-  - QAService
   - 服务编排
-  - 缓存设计
-  - 降级策略
 description: 意图、计划、改写、检索、重排、生成——把散落的能力串成一次可控的问答请求，还要有缓存、超时和降级
 mathjax: true
 ---

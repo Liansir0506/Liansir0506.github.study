@@ -7,7 +7,6 @@ categories:
 tags:
   - 随机森林
   - fasttext
-  - TF-IDF
   - 文本分类
 description: 两个简单但能打的基线——随机森林靠 TF-IDF 词袋，fasttext 靠词向量平均，跑得飞快
 mathjax: true

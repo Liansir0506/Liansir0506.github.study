@@ -6,9 +6,8 @@ categories:
   - 智慧旅游 Agent
 tags:
   - A2A
-  - Agent2Agent
   - AgentCard
-  - 多Agent协作
+  - 多Agent
 description: MCP 连工具，A2A 连 Agent——Google 2025 年发布的协作协议，解决能力发现、任务管理、UX 协商与安全协作
 mathjax: true
 ---

@@ -8,7 +8,6 @@ tags:
   - BERT
   - 迁移学习
   - transformers
-  - 预训练
 description: 预训练+微调是怎么成为主流的、BERT 的关键设计、transformers 三种用法——今天所有大模型的起点
 mathjax: true
 ---

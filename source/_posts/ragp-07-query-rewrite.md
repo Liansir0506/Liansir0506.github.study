@@ -6,9 +6,6 @@ categories:
   - RAG 问答系统
 tags:
   - 查询改写
-  - Multi-Query
-  - HyDE
-  - 指代消解
 description: 用户问得口语化、有指代、还多轮——改写让检索"听懂人话"，变体让召回更全
 mathjax: true
 ---

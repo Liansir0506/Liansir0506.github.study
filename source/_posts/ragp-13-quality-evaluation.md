@@ -5,10 +5,7 @@ categories:
   - 项目篇
   - RAG 问答系统
 tags:
-  - 评测集
-  - 忠实度
-  - BadCase
-  - RAGAS
+  - 质量评测
 description: 不只看"能不能答"，还要量"答得好不好"——评测集、双维度指标、Bad Case 归因的完整闭环
 mathjax: true
 ---

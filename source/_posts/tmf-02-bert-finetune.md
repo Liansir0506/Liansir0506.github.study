@@ -8,7 +8,6 @@ tags:
   - BERT
   - 微调
   - 文本分类
-  - CLS
 description: 从一个 [CLS] 向量到分类结果——微调到底在调什么、超参怎么设、为什么它能吊打词袋模型
 mathjax: true
 ---

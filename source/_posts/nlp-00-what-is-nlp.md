@@ -6,9 +6,6 @@ categories:
   - NLP 基础
 tags:
   - NLP
-  - NLU
-  - NLG
-  - 文本处理流程
 description: NLU 和 NLG 什么区别、NLP 的典型应用有哪些、为什么中文处理比英文难——NLP 模块的入口地图
 mathjax: true
 ---

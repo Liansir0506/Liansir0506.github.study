@@ -7,8 +7,6 @@ categories:
 tags:
   - KNN
   - 特征缩放
-  - 归一化
-  - 标准化
 description: KNN 一句话原理、K 值怎么选、为什么它必须先做特征缩放——再用鸢尾花数据集走一遍完整流程
 mathjax: true
 ---

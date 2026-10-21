@@ -5,10 +5,9 @@ categories:
   - 应用篇
   - 提示词工程
 tags:
-  - 金融文本
+  - 项目实战
   - 信息抽取
   - 文本分类
-  - 文本相似度
 description: 金融场景下最典型的三类 Prompt 应用——分类、抽取、相似度判断，以及三条实战经验
 mathjax: true
 ---

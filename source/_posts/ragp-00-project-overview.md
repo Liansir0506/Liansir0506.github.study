@@ -5,10 +5,7 @@ categories:
   - 项目篇
   - RAG 问答系统
 tags:
-  - RAG项目
-  - 系统架构
-  - 技术栈
-  - KnowForge
+  - RAG
 description: 从业务需求到技术选型到系统架构——一个能写进简历的企业级 RAG 问答平台全景图
 mathjax: true
 ---
@@ -54,23 +51,81 @@ mathjax: true
 
 RAG 系统的本质是两条链路（eng-04 讲过原理，这里是工程实现）：
 
-```text
-【离线链路】知识入库
-原始文档 → 解析清洗 → 切片 → Embedding → 写入 Milvus
-                              ↓
-                        版本管理（构建→校验→激活）
-
-【在线链路】问答服务
-用户提问
-  → 意图分类（FAQ / 文档 / 闲聊 / 转人工）
-  → 检索计划（查哪几个库、各取多少）
-  → 查询改写（补全/扩展/变体）
-  → 混合检索（Dense + BM25，RRF 融合）
-  → Reranker 精排
-  → Prompt 组装（上下文 + 引用要求）
-  → LLM 流式生成
-  → 返回答案 + 出处
-```
+<svg class="lm-diagram" viewBox="0 0 720 492" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>KnowForge 系统架构分层图</title>
+  <defs>
+    <marker id="dArrD" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#49b1f5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <text x="16" y="70" class="d-accent-ink">接入层</text>
+  <rect x="86" y="30" width="534" height="72" rx="12" class="d-lane"/>
+  <rect x="98" y="42" width="250" height="48" rx="8" class="d-box"/>
+  <text x="223" y="66" class="d-ink" text-anchor="middle">Web / IM 入口</text>
+  <text x="223" y="82" class="d-sub" text-anchor="middle">多端接入</text>
+  <rect x="368" y="42" width="250" height="48" rx="8" class="d-box"/>
+  <text x="493" y="66" class="d-ink" text-anchor="middle">API 网关</text>
+  <text x="493" y="82" class="d-sub" text-anchor="middle">鉴权 · 限流 · 租户识别</text>
+  <line x1="353" y1="102" x2="353" y2="114" class="d-flow" marker-end="url(#dArrD)"/>
+  <text x="16" y="158" class="d-accent-ink">服务层</text>
+  <rect x="86" y="118" width="534" height="72" rx="12" class="d-lane"/>
+  <rect x="98" y="130" width="166" height="48" rx="8" class="d-box-soft"/>
+  <text x="181" y="154" class="d-accent-ink" text-anchor="middle">QAService 编排</text>
+  <text x="181" y="170" class="d-sub" text-anchor="middle">串起整条链路</text>
+  <rect x="277" y="130" width="166" height="48" rx="8" class="d-box"/>
+  <text x="360" y="154" class="d-ink" text-anchor="middle">意图分类</text>
+  <text x="360" y="170" class="d-sub" text-anchor="middle">FAQ / 文档 / 闲聊 / 人工</text>
+  <rect x="456" y="130" width="166" height="48" rx="8" class="d-box"/>
+  <text x="539" y="154" class="d-ink" text-anchor="middle">查询改写</text>
+  <text x="539" y="170" class="d-sub" text-anchor="middle">补全 · 扩展 · 变体</text>
+  <line x1="353" y1="190" x2="353" y2="202" class="d-flow" marker-end="url(#dArrD)"/>
+  <text x="16" y="246" class="d-accent-ink">检索层</text>
+  <rect x="86" y="206" width="534" height="72" rx="12" class="d-lane"/>
+  <rect x="98" y="218" width="122" height="48" rx="8" class="d-box"/>
+  <text x="159" y="242" class="d-ink" text-anchor="middle">Milvus</text>
+  <text x="159" y="258" class="d-sub" text-anchor="middle">向量检索</text>
+  <rect x="231" y="218" width="122" height="48" rx="8" class="d-box"/>
+  <text x="292" y="242" class="d-ink" text-anchor="middle">ES</text>
+  <text x="292" y="258" class="d-sub" text-anchor="middle">全文 BM25</text>
+  <rect x="364" y="218" width="122" height="48" rx="8" class="d-box"/>
+  <text x="425" y="242" class="d-ink" text-anchor="middle">RRF 融合</text>
+  <text x="425" y="258" class="d-sub" text-anchor="middle">双路召回合并</text>
+  <rect x="497" y="218" width="122" height="48" rx="8" class="d-box-soft"/>
+  <text x="558" y="242" class="d-accent-ink" text-anchor="middle">Reranker</text>
+  <text x="558" y="258" class="d-sub" text-anchor="middle">精排取 TopK</text>
+  <line x1="353" y1="278" x2="353" y2="290" class="d-flow" marker-end="url(#dArrD)"/>
+  <text x="16" y="334" class="d-accent-ink">模型层</text>
+  <rect x="86" y="294" width="534" height="72" rx="12" class="d-lane"/>
+  <rect x="98" y="306" width="166" height="48" rx="8" class="d-box"/>
+  <text x="181" y="330" class="d-ink" text-anchor="middle">LLM</text>
+  <text x="181" y="346" class="d-sub" text-anchor="middle">流式生成</text>
+  <rect x="277" y="306" width="166" height="48" rx="8" class="d-box"/>
+  <text x="360" y="330" class="d-ink" text-anchor="middle">Embedding</text>
+  <text x="360" y="346" class="d-sub" text-anchor="middle">文本向量化</text>
+  <rect x="456" y="306" width="166" height="48" rx="8" class="d-box"/>
+  <text x="539" y="330" class="d-ink" text-anchor="middle">Reranker 模型</text>
+  <text x="539" y="346" class="d-sub" text-anchor="middle">相关性精排</text>
+  <line x1="353" y1="366" x2="353" y2="378" class="d-flow" marker-end="url(#dArrD)"/>
+  <text x="16" y="422" class="d-accent-ink">数据层</text>
+  <rect x="86" y="382" width="534" height="72" rx="12" class="d-lane"/>
+  <rect x="98" y="394" width="166" height="48" rx="8" class="d-box"/>
+  <text x="181" y="418" class="d-ink" text-anchor="middle">MySQL</text>
+  <text x="181" y="434" class="d-sub" text-anchor="middle">租户 · 知识库版本</text>
+  <rect x="277" y="394" width="166" height="48" rx="8" class="d-box"/>
+  <text x="360" y="418" class="d-ink" text-anchor="middle">Redis</text>
+  <text x="360" y="434" class="d-sub" text-anchor="middle">缓存 · 限流</text>
+  <rect x="456" y="394" width="166" height="48" rx="8" class="d-box"/>
+  <text x="539" y="418" class="d-ink" text-anchor="middle">MinIO</text>
+  <text x="539" y="434" class="d-sub" text-anchor="middle">原始文档</text>
+  <rect x="636" y="30" width="68" height="424" rx="12" class="d-box-soft"/>
+  <text x="670" y="64" class="d-accent-ink" text-anchor="middle">可观测</text>
+  <text x="670" y="96" class="d-sub" text-anchor="middle">Trace</text>
+  <text x="670" y="128" class="d-sub" text-anchor="middle">日志</text>
+  <text x="670" y="160" class="d-sub" text-anchor="middle">指标</text>
+  <text x="670" y="192" class="d-sub" text-anchor="middle">告警</text>
+  <text x="360" y="478" class="d-sub" text-anchor="middle">在线链路：编排 → 意图 → 改写 → 混合检索 → 精排 → 生成；每一步有缓存、超时与降级</text>
+</svg>
+<p class="lm-diagram-cap">图 4 · KnowForge 的五层架构：右边竖条是贯穿所有层的可观测能力——面试讲架构时，先讲分层再讲链路</p>
 
 ### 3.1 为什么在线链路这么"长"
 

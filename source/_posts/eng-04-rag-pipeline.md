@@ -6,9 +6,7 @@ categories:
   - AI 工程化
 tags:
   - RAG
-  - 索引管线
-  - 查询管线
-  - 向量库
+  - 向量数据库
 description: 把 RAG 从概念落成工程：离线索引管线（解析→切片→向量→入库）和在线查询管线（改写→检索→重排→生成）
 mathjax: true
 ---
@@ -44,13 +42,60 @@ RAG（Retrieval-Augmented Generation）的思路：**回答前先查资料，拿
 
 RAG 系统在工程上分两条**完全独立**的管线：
 
-```text
-【离线】索引管线（Indexing）—— 入库时跑一次
-文档 → 解析 → 切片 → 向量化 → 存入向量库
-
-【在线】查询管线（Querying）—— 每次提问都跑
-问题 → 改写 → 检索 → 重排 → 拼装 Prompt → 生成回答
-```
+<svg class="lm-diagram" viewBox="0 0 720 330" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>RAG 两条管线：离线索引与在线查询</title>
+  <defs>
+    <marker id="dArrF" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#49b1f5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <text x="16" y="28" class="d-accent-ink">离线 · 索引管线 —— 建库时跑一次（重活）</text>
+  <text x="16" y="170" class="d-accent-ink">在线 · 查询管线 —— 每次提问都跑（要快）</text>
+  <rect x="16" y="40" width="688" height="92" rx="12" class="d-lane"/>
+  <rect x="16" y="182" width="688" height="92" rx="12" class="d-lane"/>
+  <rect x="32" y="56" width="112" height="60" rx="8" class="d-box"/>
+  <text x="88" y="82" class="d-ink" text-anchor="middle">文档</text>
+  <text x="88" y="100" class="d-sub" text-anchor="middle">PDF · Word · 网页</text>
+  <rect x="168" y="56" width="112" height="60" rx="8" class="d-box"/>
+  <text x="224" y="82" class="d-ink" text-anchor="middle">解析</text>
+  <text x="224" y="100" class="d-sub" text-anchor="middle">提取纯文本</text>
+  <rect x="304" y="56" width="112" height="60" rx="8" class="d-box"/>
+  <text x="360" y="82" class="d-ink" text-anchor="middle">切片</text>
+  <text x="360" y="100" class="d-sub" text-anchor="middle">chunk + overlap</text>
+  <rect x="440" y="56" width="112" height="60" rx="8" class="d-box"/>
+  <text x="496" y="82" class="d-ink" text-anchor="middle">向量化</text>
+  <text x="496" y="100" class="d-sub" text-anchor="middle">Embedding 模型</text>
+  <rect x="576" y="56" width="112" height="60" rx="8" class="d-box-soft"/>
+  <text x="632" y="82" class="d-accent-ink" text-anchor="middle">入库</text>
+  <text x="632" y="100" class="d-sub" text-anchor="middle">Milvus + ES</text>
+  <line x1="144" y1="86" x2="162" y2="86" class="d-flow" marker-end="url(#dArrF)"/>
+  <line x1="280" y1="86" x2="298" y2="86" class="d-flow" marker-end="url(#dArrF)"/>
+  <line x1="416" y1="86" x2="434" y2="86" class="d-flow" marker-end="url(#dArrF)"/>
+  <line x1="552" y1="86" x2="570" y2="86" class="d-flow" marker-end="url(#dArrF)"/>
+  <rect x="32" y="198" width="112" height="60" rx="8" class="d-box"/>
+  <text x="88" y="224" class="d-ink" text-anchor="middle">用户问题</text>
+  <text x="88" y="242" class="d-sub" text-anchor="middle">口语化 · 有指代</text>
+  <rect x="168" y="198" width="112" height="60" rx="8" class="d-box"/>
+  <text x="224" y="224" class="d-ink" text-anchor="middle">查询改写</text>
+  <text x="224" y="242" class="d-sub" text-anchor="middle">补全 · HyDE · 变体</text>
+  <rect x="304" y="198" width="112" height="60" rx="8" class="d-box-soft"/>
+  <text x="360" y="224" class="d-accent-ink" text-anchor="middle">混合检索</text>
+  <text x="360" y="242" class="d-sub" text-anchor="middle">向量 + 全文</text>
+  <rect x="440" y="198" width="112" height="60" rx="8" class="d-box"/>
+  <text x="496" y="224" class="d-ink" text-anchor="middle">Rerank</text>
+  <text x="496" y="242" class="d-sub" text-anchor="middle">精排取 TopK</text>
+  <rect x="576" y="198" width="112" height="60" rx="8" class="d-box"/>
+  <text x="632" y="224" class="d-ink" text-anchor="middle">LLM 生成</text>
+  <text x="632" y="242" class="d-sub" text-anchor="middle">带引用回答</text>
+  <line x1="144" y1="228" x2="162" y2="228" class="d-flow" marker-end="url(#dArrF)"/>
+  <line x1="280" y1="228" x2="298" y2="228" class="d-flow" marker-end="url(#dArrF)"/>
+  <line x1="416" y1="228" x2="434" y2="228" class="d-flow" marker-end="url(#dArrF)"/>
+  <line x1="552" y1="228" x2="570" y2="228" class="d-flow" marker-end="url(#dArrF)"/>
+  <path d="M 632 116 L 632 152 L 360 152 L 360 194" class="d-dash"/>
+  <text x="500" y="146" class="d-sub" text-anchor="middle">入库的数据在这里被检索</text>
+  <text x="360" y="314" class="d-sub" text-anchor="middle">分开的价值：离线跑一次、求准；在线每次跑、求快——互不拖累</text>
+</svg>
+<p class="lm-diagram-cap">图 3 · RAG 的工程骨架：上面是入库时跑一次的索引管线，下面是每次提问都跑的查询管线</p>
 
 > 🔥 **为什么分开？**——离线管线是"重活"（解析 PDF、算几万条向量），耗时但只需跑一次；在线管线必须"快"（几百毫秒内），所以只能用轻量操作。两条管线分开设计，才能既准又快。
 

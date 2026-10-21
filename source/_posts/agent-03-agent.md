@@ -6,9 +6,7 @@ categories:
   - 智慧旅游 Agent
 tags:
   - Agent
-  - Agentic
   - ReAct
-  - 规划
 description: Agent = 大模型 + 工具 + 规划 + 记忆；Agentic 不是"是/否"，而是一个连续谱
 mathjax: true
 ---

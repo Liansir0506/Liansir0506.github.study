@@ -30,6 +30,39 @@ mathjax: true
 
 说白了，机器学习里的"学习"，很多时候就是"从数据里找规律"，而线性回归是最朴实的一种找法。
 
+<svg class="lm-diagram" viewBox="0 0 720 300" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>线性回归拟合示意图</title>
+  <circle cx="400" cy="32" r="4" class="d-dot"/><text x="410" y="36" class="d-sub">训练数据</text>
+  <line x1="490" y1="32" x2="514" y2="32" class="d-flow"/><text x="520" y="36" class="d-sub">拟合直线</text>
+  <line x1="590" y1="32" x2="614" y2="32" class="d-dash"/><text x="620" y="36" class="d-sub">残差</text>
+  <line x1="90" y1="250" x2="640" y2="250" class="d-line"/>
+  <line x1="90" y1="250" x2="90" y2="60" class="d-line"/>
+  <text x="90" y="268" class="d-sub" text-anchor="middle">150</text>
+  <text x="273" y="268" class="d-sub" text-anchor="middle">165</text>
+  <text x="456" y="268" class="d-sub" text-anchor="middle">180</text>
+  <text x="640" y="268" class="d-sub" text-anchor="middle">195</text>
+  <text x="365" y="290" class="d-sub" text-anchor="middle">身高 (cm)</text>
+  <text x="78" y="254" class="d-sub" text-anchor="end">40</text>
+  <text x="78" y="173" class="d-sub" text-anchor="end">70</text>
+  <text x="78" y="91" class="d-sub" text-anchor="end">100</text>
+  <text x="90" y="50" class="d-sub">体重 (kg)</text>
+  <line x1="273" y1="217" x2="273" y2="200" class="d-dash"/>
+  <line x1="432" y1="163" x2="432" y2="169" class="d-dash"/>
+  <line x1="481" y1="174" x2="481" y2="159" class="d-dash"/>
+  <line x1="555" y1="152" x2="555" y2="145" class="d-dash"/>
+  <line x1="90" y1="236" x2="640" y2="128" class="d-flow"/>
+  <circle cx="151" cy="234" r="4" class="d-dot"/><circle cx="212" cy="209" r="4" class="d-dot"/>
+  <circle cx="273" cy="217" r="4" class="d-dot"/><circle cx="310" cy="190" r="4" class="d-dot"/>
+  <circle cx="334" cy="204" r="4" class="d-dot"/><circle cx="359" cy="180" r="4" class="d-dot"/>
+  <circle cx="396" cy="188" r="4" class="d-dot"/><circle cx="432" cy="163" r="4" class="d-dot"/>
+  <circle cx="481" cy="174" r="4" class="d-dot"/><circle cx="518" cy="144" r="4" class="d-dot"/>
+  <circle cx="555" cy="152" r="4" class="d-dot"/>
+  <line x1="170" y1="172" x2="215" y2="218" class="d-dash"/>
+  <text x="105" y="166" class="d-accent-ink">拟合直线：y = wx + b</text>
+  <text x="288" y="212" class="d-sub">残差</text>
+</svg>
+<p class="lm-diagram-cap">图 1 · 线性回归在干什么：蓝线是模型学到的规律，虚线是每个点和规律的差距——训练就是让这些差距的总和最小</p>
+
 ### 1.2 它在知识地图上的位置
 
 | 维度 | 位置 |

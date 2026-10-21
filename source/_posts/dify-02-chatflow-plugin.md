@@ -6,7 +6,6 @@ categories:
   - Dify 应用平台
 tags:
   - 对话流
-  - Chatflow
   - 工作流
   - 插件
 description: 五种应用类型怎么选、Chatflow 和 Workflow 差在哪、节点怎么编排、插件怎么接——Dify 的使用地图

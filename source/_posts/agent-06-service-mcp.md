@@ -5,10 +5,7 @@ categories:
   - 项目篇
   - 智慧旅游 Agent
 tags:
-  - MCP服务
-  - FastMCP
-  - Service层
-  - 优雅降级
+  - MCP
 description: 薄壳注册 + 厚实 Service 的两层分离、16 个工具怎么组织、外部 API 挂了怎么兜底
 mathjax: true
 ---

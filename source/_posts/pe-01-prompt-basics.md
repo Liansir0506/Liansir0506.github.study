@@ -7,8 +7,7 @@ categories:
 tags:
   - Few-shot
   - 思维链
-  - CoT
-  - 角色设定
+  - 提示词
 description: Prompt 的五个要素、Few-shot 为什么有效、思维链怎么让模型"想清楚再答"——面试必考的三板斧
 mathjax: true
 ---

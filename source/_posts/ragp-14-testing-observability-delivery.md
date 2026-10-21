@@ -7,8 +7,7 @@ categories:
 tags:
   - 测试
   - 可观测性
-  - Trace
-  - Docker交付
+  - Docker
 description: 从"能跑"到"敢上线"——三层测试、四个可观测指标、Docker 一键交付与排障
 mathjax: true
 ---

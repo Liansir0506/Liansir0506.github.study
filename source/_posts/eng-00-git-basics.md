@@ -6,8 +6,6 @@ categories:
   - AI 工程化
 tags:
   - Git
-  - 版本控制
-  - commit规范
 description: 工作区、暂存区、本地库三大区一次讲清，日常六个命令 + 提交规范——工程化的第一步
 mathjax: true
 ---

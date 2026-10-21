@@ -6,7 +6,6 @@ categories:
   - 机器学习
 tags:
   - 聚类
-  - KMeans
   - 无监督学习
   - SSE
 description: 没有标准答案时机器怎么学？KMeans 五步流程、K 值的肘部法与轮廓系数、用户画像实战

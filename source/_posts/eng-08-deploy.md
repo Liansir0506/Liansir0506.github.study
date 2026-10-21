@@ -6,9 +6,6 @@ categories:
   - AI 工程化
 tags:
   - 部署
-  - 服务器
-  - SSH
-  - Nginx
 description: 买服务器、配安全组、装 Docker、跑起服务——把项目真正变成"别人能访问"的网站
 mathjax: true
 ---

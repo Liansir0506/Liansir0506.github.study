@@ -6,9 +6,7 @@ categories:
   - Dify 应用平台
 tags:
   - 项目实战
-  - 法律助手
   - 查询改写
-  - 合同审核
 description: 律所主页的法律问答机器人——技术选型为什么排除 Coze、查询改写与 rerank 怎么用、合同审核怎么分类处理
 mathjax: true
 ---

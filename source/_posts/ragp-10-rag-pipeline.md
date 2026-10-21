@@ -5,10 +5,9 @@ categories:
   - 项目篇
   - RAG 问答系统
 tags:
-  - RAG Pipeline
-  - Prompt设计
-  - 引用标注
-  - 拒答策略
+  - RAG
+  - 提示词
+  - 意图分类
 description: 上下文怎么拼、引用怎么标、没找到怎么拒——RAG 的 Prompt 设计比"提示词技巧"更讲究工程约束
 mathjax: true
 ---

@@ -8,7 +8,7 @@ tags:
   - 激活函数
   - 损失函数
   - nn.Module
-  - 参数初始化
+  - 神经网络
 description: sigmoid/tanh/ReLU/softmax 怎么选、CrossEntropy 为什么自带 softmax、nn.Module 三步搭网络、参数为什么不能全 0
 mathjax: true
 ---

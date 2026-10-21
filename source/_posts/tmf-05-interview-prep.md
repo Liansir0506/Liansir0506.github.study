@@ -6,9 +6,6 @@ categories:
   - 投满分 NLP 项目
 tags:
   - 面试
-  - 简历
-  - 自我介绍
-  - 项目讲解
 description: 简历四段式、自我介绍模板、项目 8 步法、问题回答框架——把做过的事讲成"值得录用"的样子
 mathjax: true
 ---

@@ -5,10 +5,7 @@ categories:
   - 应用篇
   - Dify 应用平台
 tags:
-  - 全文检索
-  - 语义检索
   - 混合检索
-  - 倒排索引
   - RAG
 description: 倒排索引、BM25、向量检索、rerank——RAG 的三种检索方式一次讲透，这是所有知识库的底层
 mathjax: true

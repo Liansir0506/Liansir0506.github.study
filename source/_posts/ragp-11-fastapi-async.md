@@ -8,7 +8,6 @@ tags:
   - FastAPI
   - 异步
   - SSE
-  - WebSocket
 description: async/await 在 RAG 链路里到底省了什么、SSE 和 WebSocket 怎么选、并发与超时怎么控
 mathjax: true
 ---

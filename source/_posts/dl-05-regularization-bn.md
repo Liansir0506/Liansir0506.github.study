@@ -5,10 +5,8 @@ categories:
   - 基础篇
   - 深度学习
 tags:
-  - Dropout
-  - BatchNorm
-  - 过拟合
-  - 模型保存
+  - 正则化
+  - 神经网络
 description: Dropout 怎么随机失活、BatchNorm 为什么放在激活前、train/eval 模式的区别，附完整的多分类实战案例
 mathjax: true
 ---

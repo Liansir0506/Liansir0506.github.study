@@ -6,8 +6,6 @@ categories:
   - 深度学习
 tags:
   - CNN
-  - 卷积
-  - 池化
   - 图像分类
 description: 为什么图像不能硬塞给全连接网络？卷积的局部感知与参数共享、池化层降维，以及 CIFAR-10 图像分类实战
 mathjax: true

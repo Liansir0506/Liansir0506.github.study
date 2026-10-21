@@ -8,7 +8,6 @@ tags:
   - Coze
   - 工作流
   - 插件
-  - Workflow
 description: 插件是零件、工作流是装配线、Bot 是产品——可视化编排怎么把多步骤任务管起来
 mathjax: true
 ---

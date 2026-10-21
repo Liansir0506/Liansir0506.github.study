@@ -7,8 +7,6 @@ categories:
 tags:
   - 文本分类
   - fasttext
-  - 情感分析
-  - 多标签分类
 description: 从数据探索到训练调参、多标签处理、模型评估——用 fasttext 完整走一遍文本分类项目
 mathjax: true
 ---

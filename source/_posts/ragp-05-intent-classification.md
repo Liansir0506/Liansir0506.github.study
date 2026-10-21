@@ -6,8 +6,6 @@ categories:
   - RAG 问答系统
 tags:
   - 意图分类
-  - LLM分类
-  - 路由
   - 结构化输出
 description: FAQ、文档问答、闲聊、转人工——不同问题需要不同策略，意图分类就是整个问答系统的"总调度台"
 mathjax: true

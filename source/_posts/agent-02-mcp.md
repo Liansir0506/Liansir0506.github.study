@@ -6,9 +6,7 @@ categories:
   - 智慧旅游 Agent
 tags:
   - MCP
-  - ModelContextProtocol
-  - 工具标准化
-  - stdio
+  - 工具调用
 description: 从"每家一根充电线"到"一个接口通吃"——MCP 如何统一模型与工具的连接，以及 Host/Client/Server 与三种传输方式
 mathjax: true
 ---
@@ -57,19 +55,46 @@ mathjax: true
 
 ## 三、初识：MCP 的三方架构
 
-```text
-┌─────────────── Host（宿主机应用，如 Claude Desktop / 你的 Agent 程序）───────────────┐
-│                                                                                    │
-│   ┌──────────────┐        ┌──────────────┐        ┌──────────────┐                │
-│   │ MCP Client 1 │        │ MCP Client 2 │        │ MCP Client 3 │                │
-│   └──────┬───────┘        └──────┬───────┘        └──────┬───────┘                │
-└──────────┼───────────────────────┼───────────────────────┼────────────────────────┘
-           │                       │                       │
-    ┌──────▼──────┐         ┌──────▼──────┐         ┌──────▼──────┐
-    │ MCP Server  │         │ MCP Server  │         │ MCP Server  │
-    │  （天气）    │         │  （数据库）  │         │  （文件系统） │
-    └─────────────┘         └─────────────┘         └─────────────┘
-```
+<svg class="lm-diagram" viewBox="0 0 720 340" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>MCP 三方架构：Host、Client 与 Server</title>
+  <defs>
+    <marker id="dArrM" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#49b1f5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <rect x="30" y="30" width="290" height="120" rx="12" class="d-box-soft"/>
+  <text x="175" y="56" class="d-accent-ink" text-anchor="middle">Host（宿主应用）</text>
+  <text x="175" y="74" class="d-sub" text-anchor="middle">Claude / Coze / 你的 Agent 程序</text>
+  <rect x="60" y="90" width="110" height="40" rx="8" class="d-box"/>
+  <text x="115" y="114" class="d-ink" text-anchor="middle">LLM</text>
+  <rect x="185" y="90" width="110" height="40" rx="8" class="d-box"/>
+  <text x="240" y="108" class="d-ink" text-anchor="middle">MCP Client ×N</text>
+  <text x="240" y="124" class="d-sub" text-anchor="middle">每个 Server 一条连接</text>
+  <rect x="386" y="52" width="86" height="236" rx="12" class="d-box-soft"/>
+  <text x="429" y="150" class="d-accent-ink" text-anchor="middle">MCP</text>
+  <text x="429" y="170" class="d-sub" text-anchor="middle">协议层</text>
+  <text x="429" y="200" class="d-sub" text-anchor="middle">JSON-RPC</text>
+  <text x="429" y="222" class="d-sub" text-anchor="middle">stdio / SSE</text>
+  <text x="429" y="252" class="d-sub" text-anchor="middle">HTTP</text>
+  <line x1="295" y1="110" x2="380" y2="110" class="d-flow" marker-end="url(#dArrM)"/>
+  <line x1="380" y1="230" x2="295" y2="230" class="d-flow" marker-end="url(#dArrM)"/>
+  <text x="338" y="98" class="d-sub" text-anchor="middle">调用</text>
+  <text x="338" y="252" class="d-sub" text-anchor="middle">结果</text>
+  <rect x="496" y="30" width="196" height="66" rx="10" class="d-box"/>
+  <text x="594" y="56" class="d-ink" text-anchor="middle">天气服务</text>
+  <text x="594" y="74" class="d-sub" text-anchor="middle">get_weather / 生活指数</text>
+  <rect x="496" y="112" width="196" height="66" rx="10" class="d-box"/>
+  <text x="594" y="138" class="d-ink" text-anchor="middle">地图服务</text>
+  <text x="594" y="156" class="d-sub" text-anchor="middle">geocode / 路线规划</text>
+  <rect x="496" y="194" width="196" height="66" rx="10" class="d-box"/>
+  <text x="594" y="220" class="d-ink" text-anchor="middle">旅行服务</text>
+  <text x="594" y="238" class="d-sub" text-anchor="middle">订酒店 / 查航班</text>
+  <line x1="472" y1="63" x2="490" y2="63" class="d-flow"/>
+  <line x1="472" y1="145" x2="490" y2="145" class="d-flow"/>
+  <line x1="472" y1="227" x2="490" y2="227" class="d-flow"/>
+  <text x="360" y="316" class="d-sub" text-anchor="middle">Type-C 类比：Host 是笔记本，Server 是外设，MCP 是那个统一的接口——工具作者自己描述能力，模型按需取用</text>
+</svg>
+<p class="lm-diagram-cap">图 5 · MCP 三方架构：一个 Host 连多个 Server，能力按领域拆分；工具的描述由 Server 自己提供</p>
 
 | 角色 | 职责 |
 |---|---|

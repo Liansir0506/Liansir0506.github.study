@@ -8,7 +8,6 @@ tags:
   - Agent
   - MCP
   - A2A
-  - SmartVoyage
 description: 一句话规划旅行的智能助手——用 MCP 接工具、用 A2A 连 Agent，这是 2025 年之后 Agent 工程的标准架构
 mathjax: true
 ---

@@ -5,10 +5,8 @@ categories:
   - 基础篇
   - NLP 基础
 tags:
-  - 词向量
+  - Embedding
   - word2vec
-  - CBOW
-  - Skip-gram
   - fasttext
 description: CBOW 和 Skip-gram 怎么训练出词向量、fasttext 怎么用、怎么验证"语义相近"——RAG 向量检索从这篇开始
 mathjax: true

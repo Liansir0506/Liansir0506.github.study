@@ -856,6 +856,88 @@ html[data-theme='dark'] .lm-intro-go {
 }
 
 /* ============================================================
+   文章内嵌架构图 / 流程图（markdown 里的 inline SVG）
+   用 CSS 变量着色，自动跟随明暗主题
+   ============================================================ */
+.lm-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 22px 0 4px;
+}
+
+.lm-diagram .d-box {
+  fill: var(--card-bg);
+  stroke: var(--hr-border);
+  stroke-width: 1;
+}
+
+.lm-diagram .d-box-soft {
+  fill: var(--lm-accent-soft);
+  stroke: var(--lm-accent);
+  stroke-width: 1;
+}
+
+.lm-diagram .d-ink {
+  fill: var(--font-color);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.lm-diagram .d-sub {
+  fill: var(--card-meta);
+  font-size: 11px;
+}
+
+.lm-diagram .d-accent-ink {
+  fill: var(--lm-accent);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.lm-diagram .d-flow {
+  stroke: var(--lm-accent);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.lm-diagram .d-flow-back {
+  stroke: #e24b4a;
+  stroke-width: 1.5;
+  fill: none;
+  stroke-dasharray: 5 4;
+}
+
+.lm-diagram .d-line {
+  stroke: var(--hr-border);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.lm-diagram .d-dash {
+  stroke: var(--card-meta);
+  stroke-width: 1;
+  fill: none;
+  stroke-dasharray: 4 3;
+}
+
+.lm-diagram .d-lane {
+  fill: var(--lm-accent-soft);
+  opacity: 0.5;
+}
+
+.lm-diagram .d-dot {
+  fill: var(--lm-accent);
+}
+
+.lm-diagram-cap {
+  margin: 0 0 24px;
+  font-size: 12px;
+  color: var(--card-meta);
+  text-align: center;
+}
+
+/* ============================================================
    响应式
    ============================================================ */
 @media (max-width: 1200px) {

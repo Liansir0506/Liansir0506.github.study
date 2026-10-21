@@ -5,10 +5,8 @@ categories:
   - 应用篇
   - 提示词工程
 tags:
-  - Prompt
-  - 大模型API
-  - messages角色
-  - ollama
+  - 提示词
+  - 大模型
 description: 大模型怎么调用、messages 三种角色怎么用、本地模型什么时候用——提示词工程的地基篇
 mathjax: true
 ---

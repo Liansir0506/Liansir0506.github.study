@@ -6,8 +6,6 @@ categories:
   - Coze 智能体
 tags:
   - 项目实战
-  - AI面试助手
-  - 技术选型
   - 多Agent
 description: 从业务痛点、一期规划取舍、多 Agent 架构到技术选型对比——一个完整的企业级 AI 项目复盘
 mathjax: true

@@ -6,9 +6,7 @@ categories:
   - NLP 基础
 tags:
   - 分词
-  - jieba
-  - 词性标注
-  - one-hot
+  - one-hot编码
 description: 中文分词三种模式、自定义词典、词性标注，以及把词变成数字的第一种方式 one-hot——附它为什么被淘汰
 mathjax: true
 ---

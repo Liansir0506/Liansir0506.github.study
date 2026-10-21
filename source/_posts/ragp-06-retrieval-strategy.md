@@ -6,9 +6,7 @@ categories:
   - RAG 问答系统
 tags:
   - 检索策略
-  - 动态计划
-  - 多路召回
-  - RetrievalPlan
+  - 混合检索
 description: 把"检索"从写死的参数变成可编排的计划——不同问题用不同的查法，才是企业级 RAG 的做法
 mathjax: true
 ---

@@ -6,9 +6,8 @@ categories:
   - RAG 问答系统
 tags:
   - LangChain
-  - LCEL
   - 结构化输出
-  - 流式输出
+  - SSE
 description: 六大核心抽象、LCEL 管道语法、结构化输出与流式生成——LangChain 到底值不值得用
 mathjax: true
 ---

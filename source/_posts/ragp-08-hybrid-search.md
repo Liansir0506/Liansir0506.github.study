@@ -6,7 +6,6 @@ categories:
   - RAG 问答系统
 tags:
   - 混合检索
-  - RRF
   - Reranker
   - Milvus
 description: 双路召回怎么融合、RRF 的 k 怎么调、Reranker 怎么选怎么用——把"检索准确率"真正做上去
@@ -30,6 +29,46 @@ mathjax: true
 **真实问题两种需求同时存在** → 单路必漏 → 双路召回 + 融合。
 
 ## 二、初识：RRF 融合（倒数排名融合）
+
+<svg class="lm-diagram" viewBox="0 0 720 330" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>混合检索与 RRF 融合流程</title>
+  <defs>
+    <marker id="dArrH" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#49b1f5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <rect x="20" y="120" width="104" height="56" rx="8" class="d-box-soft"/>
+  <text x="72" y="146" class="d-accent-ink" text-anchor="middle">Query</text>
+  <text x="72" y="164" class="d-sub" text-anchor="middle">用户问题</text>
+  <rect x="170" y="46" width="150" height="60" rx="8" class="d-box"/>
+  <text x="245" y="72" class="d-ink" text-anchor="middle">向量检索</text>
+  <text x="245" y="90" class="d-sub" text-anchor="middle">Milvus · 余弦相似度</text>
+  <rect x="170" y="196" width="150" height="60" rx="8" class="d-box"/>
+  <text x="245" y="222" class="d-ink" text-anchor="middle">全文检索</text>
+  <text x="245" y="240" class="d-sub" text-anchor="middle">ES · BM25 词权重</text>
+  <line x1="124" y1="140" x2="160" y2="82" class="d-flow" marker-end="url(#dArrH)"/>
+  <line x1="124" y1="156" x2="160" y2="220" class="d-flow" marker-end="url(#dArrH)"/>
+  <rect x="360" y="46" width="130" height="60" rx="8" class="d-box"/>
+  <text x="425" y="64" class="d-sub" text-anchor="middle">向量路排名</text>
+  <text x="425" y="84" class="d-ink" text-anchor="middle">C₁ · A₂ · E₅ …</text>
+  <rect x="360" y="196" width="130" height="60" rx="8" class="d-box"/>
+  <text x="425" y="214" class="d-sub" text-anchor="middle">BM25 路排名</text>
+  <text x="425" y="234" class="d-ink" text-anchor="middle">B₁ · C₂ · F₄ …</text>
+  <line x1="320" y1="76" x2="354" y2="76" class="d-flow" marker-end="url(#dArrH)"/>
+  <line x1="320" y1="226" x2="354" y2="226" class="d-flow" marker-end="url(#dArrH)"/>
+  <rect x="530" y="105" width="76" height="92" rx="10" class="d-box-soft"/>
+  <text x="568" y="140" class="d-accent-ink" text-anchor="middle">RRF</text>
+  <text x="568" y="160" class="d-sub" text-anchor="middle">融合</text>
+  <text x="568" y="180" class="d-sub" text-anchor="middle">k=60</text>
+  <line x1="490" y1="76" x2="524" y2="128" class="d-flow" marker-end="url(#dArrH)"/>
+  <line x1="490" y1="226" x2="524" y2="176" class="d-flow" marker-end="url(#dArrH)"/>
+  <rect x="530" y="232" width="150" height="52" rx="8" class="d-box"/>
+  <text x="605" y="254" class="d-ink" text-anchor="middle">Reranker 精排</text>
+  <text x="605" y="272" class="d-sub" text-anchor="middle">取最终 TopK</text>
+  <line x1="568" y1="197" x2="568" y2="226" class="d-flow" marker-end="url(#dArrH)"/>
+  <text x="360" y="312" class="d-sub" text-anchor="middle">两路都排得靠前的文档胜出——两个检索器都认可，就更可信</text>
+</svg>
+<p class="lm-diagram-cap">图 6 · 混合检索：两路各自召回，RRF 用「排名」而不是「分数」融合，绕开量纲问题，再交给 Reranker 精排</p>
 
 ### 2.1 为什么不用分数相加
 

@@ -6,9 +6,6 @@ categories:
   - AI 工程化
 tags:
   - 测试
-  - pytest
-  - mock
-  - 环境隔离
 description: 测试金字塔、pytest 三件套、用 mock 隔离大模型——以及 dev/test/prod 三环境为什么必须分开
 mathjax: true
 ---

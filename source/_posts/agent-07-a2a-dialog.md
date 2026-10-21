@@ -5,10 +5,8 @@ categories:
   - 项目篇
   - 智慧旅游 Agent
 tags:
-  - A2A实现
+  - A2A
   - AgentCard
-  - 对话服务
-  - 记忆模块
 description: 用 LangChain Agent 调 MCP 工具、用 python_a2a 做任务状态管理、用五层记忆实现"记得用户"——智能体的完整落地
 mathjax: true
 ---

@@ -6,9 +6,7 @@ categories:
   - 深度学习
 tags:
   - 优化器
-  - Adam
-  - 学习率衰减
-  - DataLoader
+  - PyTorch
 description: 训练循环六步、五种优化器的演进、三种学习率衰减方案，最后一个完整的线性回归训练案例
 mathjax: true
 ---

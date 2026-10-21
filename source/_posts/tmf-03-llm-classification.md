@@ -5,8 +5,8 @@ categories:
   - 项目篇
   - 投满分 NLP 项目
 tags:
-  - LLM分类
-  - DeepSeek
+  - 意图分类
+  - 大模型
   - Few-shot
   - 提示词
 description: 不训练、不标注、改一句话就能调——大模型分类什么时候真香，什么时候不如微调

@@ -6,9 +6,6 @@ categories:
   - Dify 应用平台
 tags:
   - Dify
-  - 开源
-  - BaaS
-  - Coze对比
 description: Dify 是什么、和 Coze 的定位差在哪、什么场景该选谁——平台选型的第一课
 mathjax: true
 ---

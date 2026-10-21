@@ -5,10 +5,7 @@ categories:
   - 工程篇
   - AI 工程化
 tags:
-  - Git分支
-  - PullRequest
-  - 代码冲突
-  - 回滚
+  - Git
 description: 分支怎么建、冲突怎么解、PR 怎么提、代码写坏了怎么救——团队协作的四个关键动作
 mathjax: true
 ---
