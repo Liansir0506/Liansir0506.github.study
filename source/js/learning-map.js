@@ -95,6 +95,7 @@
   var tagMatch = pathname.match(new RegExp('^' + ROOT + '/tags/([^/]+)$'));
   var isArchive = new RegExp('^' + ROOT + '/archives$').test(pathname);
   var isCategoriesIndex = new RegExp('^' + ROOT + '/categories$').test(pathname);
+  var isTagsIndex = new RegExp('^' + ROOT + '/tags$').test(pathname);
   var isPostPage = !!$('#article-container');
 
   /* ============================================================
@@ -609,5 +610,8 @@
     /* 分类总览页：置顶开篇文章 */
     document.documentElement.classList.add('lm-list');
     initCategoriesIndex();
+  } else if (isTagsIndex) {
+    /* 标签总览页：紧凑头部 + 隐藏挂件栏（标签云本身保留） */
+    document.documentElement.classList.add('lm-list');
   }
 })();
