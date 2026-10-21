@@ -126,7 +126,7 @@ feed:
   content_limit: 140
   content_limit_delim: ' '
   order_by: -date
-  icon: /img/favicon.png
+  icon: https://liansir0506.github.io/Liansir0506.github.study/img/butterfly-icon.png
   autodiscovery: true
   template:
 

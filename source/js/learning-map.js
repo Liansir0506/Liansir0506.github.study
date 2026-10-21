@@ -91,6 +91,9 @@
   var pathname = location.pathname.replace(/index\.html$/, '').replace(/\/+$/, '') || '/';
   var isHome = new RegExp('^' + ROOT + '(/page/\\d+)?$').test(pathname);
   var leafCatMatch = pathname.match(new RegExp('^' + ROOT + '/categories/([^/]+)/([^/]+)$'));
+  var seriesCatMatch = pathname.match(new RegExp('^' + ROOT + '/categories/([^/]+)$'));
+  var tagMatch = pathname.match(new RegExp('^' + ROOT + '/tags/([^/]+)$'));
+  var isArchive = new RegExp('^' + ROOT + '/archives$').test(pathname);
   var isPostPage = !!$('#article-container');
 
   /* ============================================================
@@ -344,7 +347,8 @@
   }
 
   /* ============================================================
-     3. 分类页改造（叶子分类：系列/模块 两级）
+     3. 列表页改造（分类 / 标签 / 归档）
+     —— 隐藏右侧挂件栏、内容区居中、顶部加标题块与序号徽章
      ============================================================ */
   function shortLabel(title) {
     var s = title.split(/[:：|(（——,，]/)[0].trim();
@@ -352,15 +356,18 @@
     return s;
   }
 
-  function initCategory(seriesName, moduleName) {
-    var catBox = $('#category');
-    var sort = catBox && $('.article-sort', catBox);
+  function initListPage(cfg) {
+    document.documentElement.classList.add('lm-list');
+
+    var box = $(cfg.container);
+    if (!box) { return; }
+    var sort = $('.article-sort', box);
     if (!sort) { return; }
 
     var items = $$('.article-sort-item.no-article-cover', sort);
     if (!items.length) { return; }
 
-    /* 收集文章（此时已按学习顺序正序排列） */
+    /* 收集文章（分类页已按学习顺序正序排列） */
     var posts = items.map(function (item) {
       var a = $('.article-sort-item-title', item);
       return {
@@ -370,44 +377,60 @@
       };
     });
 
+    /* 标题块 */
+    /* 总篇数优先取主题标题里的数字（如「全部文章 - 78」），否则用当前页数量 */
+    var themeTitle = $('.article-sort-title', box);
+    var numMatch = themeTitle && themeTitle.textContent.match(/(\d+)/);
+    var total = numMatch ? parseInt(numMatch[1], 10) : posts.length;
+
+    var head = el('div', 'lm-page-head');
+    if (cfg.kicker) {
+      head.appendChild(el('div', 'lm-page-kicker', cfg.kicker));
+    }
+    head.appendChild(el('h1', 'lm-page-title', cfg.title));
+    head.appendChild(el('p', 'lm-page-sub', cfg.sub + ' · 共 ' + total + ' 篇'));
+    box.insertBefore(head, box.firstChild);
+
     /* 提示条 */
     var note = el('p', 'lm-cat-note');
-    note.innerHTML = '<b>' + moduleName + '</b> · 共 ' + posts.length + ' 篇 · 按学习顺序排列，建议从第 1 篇开始读';
+    note.innerHTML = cfg.note || ('<b>' + cfg.title + '</b> · 按学习顺序排列，建议从第 1 篇开始读');
     sort.parentNode.insertBefore(note, sort);
 
-    /* 学习路线图 */
-    var visited = readVisited();
-    var roadmap = el('div', 'lm-roadmap');
-    var rhead = el('div', 'lm-roadmap-head');
-    rhead.appendChild(el('span', 'lm-roadmap-title', '学习路线'));
-    var readCount = posts.filter(function (p) { return visited.indexOf(p.href) !== -1; }).length;
-    rhead.appendChild(el('span', 'lm-roadmap-progress', '已读 ' + readCount + ' / ' + posts.length));
-    roadmap.appendChild(rhead);
+    /* 学习路线图（仅分类叶子页需要） */
+    if (cfg.roadmap) {
+      var visited = readVisited();
+      var roadmap = el('div', 'lm-roadmap');
+      var rhead = el('div', 'lm-roadmap-head');
+      rhead.appendChild(el('span', 'lm-roadmap-title', '学习路线'));
+      var readCount = posts.filter(function (p) { return visited.indexOf(p.href) !== -1; }).length;
+      rhead.appendChild(el('span', 'lm-roadmap-progress', '已读 ' + readCount + ' / ' + posts.length));
+      roadmap.appendChild(rhead);
 
-    var steps = el('div', 'lm-roadmap-steps');
-    posts.forEach(function (p, i) {
-      var step = el('button', 'lm-roadmap-step' + (i === 0 ? ' first' : '') + (visited.indexOf(p.href) !== -1 ? ' read' : ''));
-      step.setAttribute('data-idx', i);
-      step.title = p.title;
-      step.appendChild(el('span', 'lm-rm-dot', String(i + 1)));
-      step.appendChild(el('span', 'lm-rm-label', shortLabel(p.title)));
-      step.addEventListener('click', function () {
-        p.node.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
-        p.node.classList.remove('lm-flash');
-        void p.node.offsetWidth; /* 重启动画 */
-        p.node.classList.add('lm-flash');
+      var steps = el('div', 'lm-roadmap-steps');
+      posts.forEach(function (p, i) {
+        var step = el('button', 'lm-roadmap-step' + (i === 0 ? ' first' : '') + (visited.indexOf(p.href) !== -1 ? ' read' : ''));
+        step.setAttribute('data-idx', i);
+        step.title = p.title;
+        step.appendChild(el('span', 'lm-rm-dot', String(i + 1)));
+        step.appendChild(el('span', 'lm-rm-label', shortLabel(p.title)));
+        step.addEventListener('click', function () {
+          p.node.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+          p.node.classList.remove('lm-flash');
+          void p.node.offsetWidth; /* 重启动画 */
+          p.node.classList.add('lm-flash');
+        });
+        steps.appendChild(step);
+        if (i < posts.length - 1) {
+          steps.appendChild(el('span', 'lm-rm-line'));
+        }
       });
-      steps.appendChild(step);
-      if (i < posts.length - 1) {
-        steps.appendChild(el('span', 'lm-rm-line'));
-      }
-    });
-    roadmap.appendChild(steps);
-    sort.parentNode.insertBefore(roadmap, sort);
+      roadmap.appendChild(steps);
+      sort.parentNode.insertBefore(roadmap, sort);
+    }
 
     /* 序号徽章 */
     posts.forEach(function (p, i) {
-      var ord = el('span', 'lm-ord', String(i + 1).padStart(2, '0') + '<i>/ ' + posts.length + '</i>');
+      var ord = el('span', 'lm-ord', String(i + 1).padStart(2, '0') + '<i>/ ' + total + '</i>');
       p.node.insertBefore(ord, p.node.firstChild);
     });
   }
@@ -420,8 +443,49 @@
   } else if (isHome) {
     initHome();
   } else if (leafCatMatch) {
+    /* 叶子分类页：系列/模块 两级 */
     try {
-      initCategory(decodeURIComponent(leafCatMatch[1]), decodeURIComponent(leafCatMatch[2]));
+      var series = decodeURIComponent(leafCatMatch[1]);
+      var moduleName = decodeURIComponent(leafCatMatch[2]);
+      initListPage({
+        container: '#category',
+        kicker: series,
+        title: moduleName,
+        sub: '按学习顺序排列',
+        note: '<b>' + moduleName + '</b> · 属于「' + series + '」，按学习顺序排列，建议从第 1 篇开始读',
+        roadmap: true
+      });
     } catch (e) { /* 解码失败时静默跳过 */ }
+  } else if (seriesCatMatch) {
+    /* 系列页：某一集合下的全部模块 */
+    try {
+      var seriesName = decodeURIComponent(seriesCatMatch[1]);
+      initListPage({
+        container: '#category',
+        kicker: '系列',
+        title: seriesName,
+        sub: '该系列下的全部文章',
+        note: '<b>' + seriesName + '</b> · 该系列的全部文章，按发布时间排列'
+      });
+    } catch (e) { /* ignore */ }
+  } else if (tagMatch) {
+    try {
+      var tagName = decodeURIComponent(tagMatch[1]);
+      initListPage({
+        container: '#tag',
+        kicker: '标签',
+        title: tagName,
+        sub: '所有带此标签的文章',
+        note: '<b>#' + tagName + '</b> · 所有带此标签的文章，按发布时间排列'
+      });
+    } catch (e) { /* ignore */ }
+  } else if (isArchive) {
+    initListPage({
+      container: '#archive',
+      kicker: '时间线',
+      title: '全部文章',
+      sub: '按时间归档',
+      note: '<b>全部文章</b> · 按发布时间倒序排列'
+    });
   }
 })();
