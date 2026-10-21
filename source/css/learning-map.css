@@ -30,83 +30,16 @@ html[data-theme='dark'] {
   transition: width 0.1s linear;
 }
 
-/* ---------- 首页隐藏主题默认回顶按钮（由悬浮组件替代） ---------- */
-html.lm-home #go-up {
+/* ---------- 首页：隐藏主题默认回顶按钮与右侧挂件栏 ---------- */
+/* 学习地图已承担导航职责，首页不再需要侧边挂件，内容区改为通栏 */
+html.lm-home #go-up,
+html.lm-home .aside-content,
+html.lm-home .aside_content {
   display: none !important;
 }
 
-/* ============================================================
-   首屏增强：数据条 + 入口按钮
-   ============================================================ */
-.lm-hero-extra {
-  margin-top: 22px;
-  text-align: center;
-}
-
-.lm-stats {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.lm-stat {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 6px;
-  padding: 6px 14px;
-  background: var(--card-bg);
-  border: 1px solid var(--hr-border);
-  border-radius: 8px;
-  box-shadow: var(--lm-shadow);
-  font-size: 12px;
-  color: var(--card-meta);
-}
-
-.lm-stat b {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--font-color);
-}
-
-.lm-cta {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 14px;
-}
-
-.lm-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 18px;
-  font-size: 13px;
-  line-height: 1.4;
-  border-radius: 8px;
-  border: 1px solid var(--btn-bg);
-  background: var(--btn-bg);
-  color: var(--btn-color);
-  text-decoration: none;
-  cursor: pointer;
-  transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-.lm-btn:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.08);
-}
-
-.lm-btn.lm-btn-ghost {
-  background: var(--card-bg);
-  color: var(--font-color);
-  border-color: var(--hr-border);
-}
-
-.lm-btn.lm-btn-ghost:hover {
-  border-color: var(--lm-accent);
-  color: var(--lm-accent);
+html.lm-home #content-inner {
+  display: block;
 }
 
 /* ============================================================
@@ -353,19 +286,20 @@ html[data-theme='dark'] .lm-series-badge {
 }
 
 /* ============================================================
-   最新更新（复用主题文章列表，裁剪为 5 条 + 紧凑样式）
+   最新更新（复用主题文章列表，裁剪为 5 条 + 紧凑行式排版）
    ============================================================ */
 .lm-latest-wrap {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 20px;
+  max-width: 880px;
+  margin: 12px auto 0;
+  padding: 26px 20px 8px;
+  border-top: 1px dashed var(--hr-border);
 }
 
 .lm-latest-head {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .lm-latest-title {
@@ -386,18 +320,45 @@ html[data-theme='dark'] .lm-series-badge {
 
 #recent-posts.lm-latest .recent-post-item {
   margin-bottom: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--hr-border);
+  border-radius: 10px;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+#recent-posts.lm-latest .recent-post-item:hover {
+  border-color: var(--lm-accent);
+  transform: translateX(4px);
 }
 
 #recent-posts.lm-latest .recent-post-info {
-  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 11px 16px;
 }
 
 #recent-posts.lm-latest .article-title {
+  flex: 1;
+  min-width: 180px;
   font-size: 14px;
   font-weight: 500;
+  color: var(--font-color);
 }
 
 #recent-posts.lm-latest .recent-post-item:hover .article-title {
+  color: var(--lm-accent);
+}
+
+#recent-posts.lm-latest .article-meta-wrap {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--card-meta);
+}
+
+#recent-posts.lm-latest .article-meta-wrap .article-meta__categories {
   color: var(--lm-accent);
 }
 
@@ -751,9 +712,12 @@ html[data-theme='dark'] .lm-series-badge {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .lm-map-wrap,
-  .lm-latest-wrap {
+  .lm-map-wrap {
     padding: 0 16px;
+  }
+
+  .lm-latest-wrap {
+    padding: 26px 16px 8px;
   }
 
   .lm-series {

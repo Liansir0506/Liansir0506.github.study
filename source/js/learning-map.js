@@ -88,7 +88,7 @@
   }
 
   /* ---------- 页面类型判断 ---------- */
-  var pathname = location.pathname.replace(/index\.html$/, '').replace(/\/$/, '') || '/';
+  var pathname = location.pathname.replace(/index\.html$/, '').replace(/\/+$/, '') || '/';
   var isHome = new RegExp('^' + ROOT + '(/page/\\d+)?$').test(pathname);
   var leafCatMatch = pathname.match(new RegExp('^' + ROOT + '/categories/([^/]+)/([^/]+)$'));
   var isPostPage = !!$('#article-container');
@@ -116,38 +116,6 @@
   /* ============================================================
      2. 首页改造
      ============================================================ */
-  function buildHeroExtra() {
-    var total = 1; // 1 篇开张文章（未归类）
-    var moduleTotal = 0;
-    SERIES.forEach(function (s) { moduleTotal += s.modules.length; });
-    SERIES.forEach(function (s) {
-      s.modules.forEach(function (m) { total += m.count; });
-    });
-
-    var wrap = el('div', 'lm-hero-extra');
-    var stats = el('div', 'lm-stats');
-    [
-      [total, '篇文章'],
-      [SERIES.length, '大系列'],
-      [moduleTotal, '个模块'],
-      [2, '大前沿协议']
-    ].forEach(function (pair) {
-      stats.appendChild(el('div', 'lm-stat', '<b>' + pair[0] + '</b>' + pair[1]));
-    });
-
-    var cta = el('div', 'lm-cta');
-    var start = el('a', 'lm-btn', '从零开始读');
-    start.href = ROOT + '/2026/10/20/ml-00-what-is-ml/';
-    var hot = el('a', 'lm-btn lm-btn-ghost', '只看重点篇');
-    hot.href = ROOT + '/about/';
-    cta.appendChild(start);
-    cta.appendChild(hot);
-
-    wrap.appendChild(stats);
-    wrap.appendChild(cta);
-    return wrap;
-  }
-
   function buildMapSection() {
     var wrap = el('section', 'lm-map-wrap');
     wrap.id = 'lm-map';
@@ -341,23 +309,24 @@
   function initHome() {
     document.documentElement.classList.add('lm-home');
 
-    /* 首屏数据条 + 按钮 */
-    var siteInfo = $('#site-info');
-    if (siteInfo) { siteInfo.parentNode.insertBefore(buildHeroExtra(), siteInfo.nextSibling); }
-
     /* 学习路径（注入到 main 之前，全宽） */
     var main = $('#content-inner');
     if (main) { main.parentNode.insertBefore(buildMapSection(), main); }
 
-    /* 最新更新：裁剪为 5 条、去掉分页 */
+    /* 最新更新：包进定宽容器、裁剪为 5 条、去掉分页 */
     var rp = $('#recent-posts');
     if (rp) {
+      var wrap = el('div', 'lm-latest-wrap');
+
       var head = el('div', 'lm-latest-head');
       head.appendChild(el('span', 'lm-latest-title', '最新更新'));
       var more = el('a', 'lm-latest-more', '查看全部 →');
       more.href = ROOT + '/archives/';
       head.appendChild(more);
-      rp.parentNode.insertBefore(head, rp);
+      wrap.appendChild(head);
+
+      rp.parentNode.insertBefore(wrap, rp);
+      wrap.appendChild(rp);
       rp.classList.add('lm-latest');
 
       var items = $$('.recent-post-item', rp);
