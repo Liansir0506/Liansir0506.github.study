@@ -1,0 +1,811 @@
+/* ============================================================
+   学习地图（learning-map）
+   首页学习路径 + 右下角悬浮大纲 + 分类页路线图/序号徽章
+   依赖主题 CSS 变量，自动适配明暗模式：
+   --card-bg / --font-color / --card-meta / --hr-border / --btn-bg / --btn-color
+   ============================================================ */
+
+:root {
+  --lm-accent: #49b1f5;
+  --lm-accent-deep: #1e9ddd;
+  --lm-accent-soft: rgba(73, 177, 245, 0.12);
+  --lm-amber: #ffb728;
+  --lm-shadow: 0 6px 24px rgba(30, 41, 59, 0.08);
+}
+
+html[data-theme='dark'] {
+  --lm-accent-soft: rgba(73, 177, 245, 0.2);
+  --lm-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- 顶部阅读进度条 ---------- */
+#lm-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--lm-accent);
+  z-index: 9999;
+  transition: width 0.1s linear;
+}
+
+/* ---------- 首页隐藏主题默认回顶按钮（由悬浮组件替代） ---------- */
+html.lm-home #go-up {
+  display: none !important;
+}
+
+/* ============================================================
+   首屏增强：数据条 + 入口按钮
+   ============================================================ */
+.lm-hero-extra {
+  margin-top: 22px;
+  text-align: center;
+}
+
+.lm-stats {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.lm-stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--hr-border);
+  border-radius: 8px;
+  box-shadow: var(--lm-shadow);
+  font-size: 12px;
+  color: var(--card-meta);
+}
+
+.lm-stat b {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--font-color);
+}
+
+.lm-cta {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.lm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  font-size: 13px;
+  line-height: 1.4;
+  border-radius: 8px;
+  border: 1px solid var(--btn-bg);
+  background: var(--btn-bg);
+  color: var(--btn-color);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.lm-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+}
+
+.lm-btn.lm-btn-ghost {
+  background: var(--card-bg);
+  color: var(--font-color);
+  border-color: var(--hr-border);
+}
+
+.lm-btn.lm-btn-ghost:hover {
+  border-color: var(--lm-accent);
+  color: var(--lm-accent);
+}
+
+/* ============================================================
+   学习路径区块（注入在 <main> 之前，全宽）
+   ============================================================ */
+.lm-map-wrap {
+  max-width: 1280px;
+  margin: 28px auto 8px;
+  padding: 0 20px;
+}
+
+.lm-map-head {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.lm-map-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--font-color);
+}
+
+.lm-map-title::before,
+.lm-map-title::after {
+  content: '';
+  width: 28px;
+  height: 2px;
+  background: var(--lm-accent);
+  border-radius: 1px;
+}
+
+.lm-map-sub {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--card-meta);
+}
+
+/* ---------- 单一系列 ---------- */
+.lm-series {
+  position: relative;
+  padding-left: 48px;
+  margin-bottom: 26px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.lm-series.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* 竖线（最后一个系列不画） */
+.lm-series:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: 46px;
+  bottom: -12px;
+  width: 2px;
+  background: var(--hr-border);
+}
+
+.lm-series-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.lm-node {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--hr-border);
+  background: var(--card-bg);
+  color: var(--card-meta);
+  font-size: 12px;
+  font-weight: 500;
+  transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease, transform 0.4s ease;
+}
+
+.lm-series.in .lm-node {
+  background: var(--lm-accent);
+  border-color: var(--lm-accent);
+  color: #fff;
+  transform: scale(1.06);
+}
+
+.lm-series-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lm-series-name {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--font-color);
+}
+
+.lm-series-count {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--card-meta);
+}
+
+.lm-series-tagline {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--card-meta);
+}
+
+.lm-series-badge {
+  padding: 3px 10px;
+  border-radius: 10px;
+  background: var(--lm-accent-soft);
+  color: var(--lm-accent-deep);
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+html[data-theme='dark'] .lm-series-badge {
+  color: var(--lm-accent);
+}
+
+.lm-series.active .lm-series-badge {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- 模块卡片 ---------- */
+.lm-module-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  perspective: 900px;
+}
+
+.lm-card {
+  display: block;
+  padding: 14px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--hr-border);
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--font-color);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform;
+}
+
+.lm-card:hover {
+  border-color: var(--lm-accent);
+  box-shadow: var(--lm-shadow);
+}
+
+.lm-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.lm-card-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.lm-card-count {
+  font-size: 11px;
+  color: var(--card-meta);
+  white-space: nowrap;
+}
+
+.lm-heat {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.lm-heat i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--hr-border);
+}
+
+.lm-heat i.on {
+  background: var(--lm-amber);
+}
+
+.lm-card-desc {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--card-meta);
+  min-height: 2em;
+}
+
+.lm-card-go {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--lm-accent);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.lm-card:hover .lm-card-go {
+  opacity: 1;
+  transform: none;
+}
+
+/* 卡片入场（错峰） */
+@keyframes lm-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.lm-series.in .lm-card {
+  animation: lm-card-in 0.45s ease both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+
+/* ============================================================
+   最新更新（复用主题文章列表，裁剪为 5 条 + 紧凑样式）
+   ============================================================ */
+.lm-latest-wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.lm-latest-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.lm-latest-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--font-color);
+}
+
+.lm-latest-more {
+  font-size: 12px;
+  color: var(--card-meta);
+  text-decoration: none;
+}
+
+.lm-latest-more:hover {
+  color: var(--lm-accent);
+}
+
+#recent-posts.lm-latest .recent-post-item {
+  margin-bottom: 10px;
+}
+
+#recent-posts.lm-latest .recent-post-info {
+  padding: 12px 16px;
+}
+
+#recent-posts.lm-latest .article-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+#recent-posts.lm-latest .recent-post-item:hover .article-title {
+  color: var(--lm-accent);
+}
+
+/* ============================================================
+   右下角悬浮学习大纲
+   ============================================================ */
+#lm-fab {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid var(--hr-border);
+  background: var(--card-bg);
+  box-shadow: var(--lm-shadow);
+  color: var(--lm-accent);
+  cursor: pointer;
+  z-index: 80;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+#lm-fab:hover {
+  transform: scale(1.08);
+  border-color: var(--lm-accent);
+}
+
+#lm-fab svg {
+  width: 20px;
+  height: 20px;
+}
+
+#lm-panel {
+  position: fixed;
+  right: 18px;
+  bottom: 74px;
+  width: 268px;
+  max-height: min(72vh, 560px);
+  overflow-y: auto;
+  padding: 14px;
+  background: var(--card-bg);
+  border: 1px solid var(--hr-border);
+  border-radius: 12px;
+  box-shadow: var(--lm-shadow);
+  z-index: 80;
+  opacity: 0;
+  transform: translateY(10px) scale(0.97);
+  transform-origin: bottom right;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#lm-panel.open {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.lm-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.lm-panel-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--font-color);
+}
+
+.lm-panel-close {
+  border: none;
+  background: none;
+  color: var(--card-meta);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.lm-panel-close:hover {
+  color: var(--lm-accent);
+}
+
+.lm-p-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.lm-p-row:hover,
+.lm-p-row.active {
+  background: var(--lm-accent-soft);
+}
+
+.lm-p-bar {
+  width: 4px;
+  height: 24px;
+  border-radius: 2px;
+  background: var(--hr-border);
+  flex-shrink: 0;
+}
+
+.lm-p-row.active .lm-p-bar {
+  background: var(--lm-accent);
+}
+
+.lm-p-name {
+  flex: 1;
+  font-size: 13px;
+  color: var(--font-color);
+}
+
+.lm-p-count {
+  font-size: 11px;
+  color: var(--card-meta);
+}
+
+.lm-p-modules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 8px 8px 20px;
+}
+
+.lm-p-chip {
+  padding: 2px 8px;
+  font-size: 11px;
+  color: var(--card-meta);
+  background: var(--lm-accent-soft);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.lm-p-chip:hover {
+  color: var(--lm-accent);
+}
+
+.lm-panel-foot {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--hr-border);
+  font-size: 11px;
+  color: var(--card-meta);
+}
+
+/* ============================================================
+   分类页：学习路线图 + 序号徽章
+   ============================================================ */
+.lm-cat-note {
+  margin: 0 0 12px;
+  font-size: 12px;
+  color: var(--card-meta);
+}
+
+.lm-cat-note b {
+  color: var(--lm-accent);
+  font-weight: 500;
+}
+
+.lm-roadmap {
+  margin-bottom: 18px;
+  padding: 16px 14px 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--hr-border);
+  border-radius: 12px;
+}
+
+.lm-roadmap-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.lm-roadmap-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--font-color);
+}
+
+.lm-roadmap-progress {
+  font-size: 11px;
+  color: var(--card-meta);
+  white-space: nowrap;
+}
+
+.lm-roadmap-steps {
+  display: flex;
+  align-items: flex-start;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.lm-roadmap-step {
+  flex: 1;
+  min-width: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.lm-rm-dot {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--hr-border);
+  background: var(--card-bg);
+  color: var(--card-meta);
+  font-size: 11px;
+  font-weight: 500;
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+}
+
+.lm-roadmap-step:hover .lm-rm-dot {
+  border-color: var(--lm-accent);
+  color: var(--lm-accent);
+}
+
+.lm-roadmap-step.read .lm-rm-dot {
+  border-color: var(--lm-accent);
+  color: var(--lm-accent);
+}
+
+.lm-roadmap-step.first .lm-rm-dot {
+  background: var(--lm-accent);
+  border-color: var(--lm-accent);
+  color: #fff;
+}
+
+.lm-roadmap-step.read::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lm-amber);
+}
+
+.lm-rm-dot {
+  position: relative;
+}
+
+.lm-rm-line {
+  flex: 1;
+  height: 2px;
+  min-width: 10px;
+  margin-top: 12px;
+  background: var(--hr-border);
+}
+
+.lm-rm-label {
+  font-size: 11px;
+  line-height: 1.3;
+  text-align: center;
+  color: var(--card-meta);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lm-roadmap-step:hover .lm-rm-label,
+.lm-roadmap-step.first .lm-rm-label {
+  color: var(--lm-accent);
+}
+
+/* ---------- 序号徽章 ---------- */
+.article-sort-item.no-article-cover {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lm-ord {
+  flex-shrink: 0;
+  width: 52px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--card-meta);
+}
+
+.lm-ord i {
+  display: block;
+  font-size: 10px;
+  font-style: normal;
+  color: var(--card-meta);
+  opacity: 0.7;
+}
+
+.article-sort-item.no-article-cover .article-sort-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.article-sort-item.no-article-cover:hover .lm-ord {
+  color: var(--lm-accent);
+}
+
+/* 跳转高亮闪烁 */
+@keyframes lm-flash {
+  0%, 100% {
+    background: transparent;
+  }
+  30% {
+    background: var(--lm-accent-soft);
+  }
+}
+
+.article-sort-item.lm-flash {
+  animation: lm-flash 1.2s ease;
+  border-radius: 8px;
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width: 1200px) {
+  .lm-module-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .lm-module-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .lm-map-wrap,
+  .lm-latest-wrap {
+    padding: 0 16px;
+  }
+
+  .lm-series {
+    padding-left: 40px;
+  }
+
+  .lm-series:not(:last-child)::after {
+    left: 12px;
+  }
+
+  #lm-panel {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    bottom: 76px;
+    max-height: 60vh;
+  }
+
+  .lm-stat b {
+    font-size: 15px;
+  }
+
+  .lm-ord {
+    width: 40px;
+    font-size: 13px;
+  }
+}
+
+/* ============================================================
+   动效降级：尊重系统减少动效设置
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  #lm-progress,
+  .lm-btn,
+  .lm-card,
+  .lm-node,
+  .lm-series,
+  #lm-fab,
+  #lm-panel,
+  .lm-series-badge,
+  .lm-card-go,
+  .lm-rm-dot {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .lm-series {
+    opacity: 1;
+    transform: none;
+  }
+
+  .lm-series.in .lm-card {
+    animation: none !important;
+  }
+}

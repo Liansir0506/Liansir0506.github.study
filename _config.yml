@@ -69,6 +69,10 @@ index_generator:
 default_category: uncategorized
 category_map:
 tag_map:
+# 分类页按学习顺序（时间正序）排列，每页 20 篇保证一个模块一页读完
+category_generator:
+  per_page: 20
+  order_by: date
 
 # Metadata elements
 ## https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta
