@@ -450,6 +450,24 @@
     if (ex && post.e) { ex.textContent = post.e; }
   }
 
+  /* 缺卡时克隆现有卡补上（全站最新/最旧的文章，主题可能只渲染一张卡） */
+  function ensureCard(kind, existing, template) {
+    if (existing) { return existing; }
+    if (!template) { return null; }
+    var c = template.cloneNode(true);
+    c.style.display = '';
+    var lbl = $('.info-item-1', c);
+    if (lbl) { lbl.textContent = kind === 'prev' ? '上一篇' : '下一篇'; }
+    var info = $('.info', c);
+    if (info) { info.classList.toggle('text-right', kind === 'next'); }
+    if (kind === 'prev') {
+      template.parentNode.insertBefore(c, template);
+    } else {
+      template.parentNode.insertBefore(c, template.nextSibling);
+    }
+    return c;
+  }
+
   function initPostNav() {
     var nav = $('#pagination');
     if (!nav) { return; }
@@ -501,6 +519,10 @@
         /* 学习顺序：上一篇 = 顺序中的前一篇（更早），下一篇 = 后一篇（更晚） */
         var prev = idx > 0 ? order[idx - 1] : null;
         var next = idx < order.length - 1 ? order[idx + 1] : null;
+
+        /* 缺卡时按需补齐（先补上一篇，再补下一篇） */
+        prevCard = ensureCard('prev', prevCard, nextCard);
+        nextCard = ensureCard('next', nextCard, prevCard);
 
         if (prevCard) {
           if (prev) { fillNavCard(prevCard, prev); } else { prevCard.style.display = 'none'; }
