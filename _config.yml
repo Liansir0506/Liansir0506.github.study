@@ -102,6 +102,30 @@ search:
   content: true
   format: html
 
+# Sitemap
+## https://github.com/hexojs/hexo-generator-sitemap
+sitemap:
+  path: sitemap.xml
+  rel: false
+  tags: true
+  categories: true
+
+# Feed (RSS)
+## https://github.com/hexojs/hexo-generator-feed
+feed:
+  enable: true
+  type: atom
+  path: atom.xml
+  limit: 20
+  hub:
+  content: true
+  content_limit: 140
+  content_limit_delim: ' '
+  order_by: -date
+  icon: /img/favicon.png
+  autodiscovery: true
+  template:
+
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/

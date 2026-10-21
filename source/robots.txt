@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /page/
+
+Sitemap: https://liansir0506.github.io/Liansir0506.github.study/sitemap.xml
