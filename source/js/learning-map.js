@@ -94,6 +94,7 @@
   var seriesCatMatch = pathname.match(new RegExp('^' + ROOT + '/categories/([^/]+)$'));
   var tagMatch = pathname.match(new RegExp('^' + ROOT + '/tags/([^/]+)$'));
   var isArchive = new RegExp('^' + ROOT + '/archives$').test(pathname);
+  var isCategoriesIndex = new RegExp('^' + ROOT + '/categories$').test(pathname);
   var isPostPage = !!$('#article-container');
 
   /* ============================================================
@@ -436,10 +437,105 @@
   }
 
   /* ============================================================
+     4. 文章页：按分类学习顺序重写「上一篇 / 下一篇」
+     （主题默认按全站时间顺序，会把下一篇显示成上一篇、还会串到站外文章）
+     ============================================================ */
+  function fillNavCard(a, post) {
+    if (!a) { return; }
+    a.href = ROOT + post.u;
+    a.title = post.t;
+    var t2 = $('.info-item-2', a);
+    if (t2) { t2.textContent = post.t; }
+    var ex = $$('.info-2 .info-item-1', a)[0];
+    if (ex && post.e) { ex.textContent = post.e; }
+  }
+
+  function initPostNav() {
+    var nav = $('#pagination');
+    if (!nav) { return; }
+    var cards = $$('.pagination-related', nav);
+    if (!cards.length) { return; }
+
+    /* 按卡片上的标签识别「上一篇 / 下一篇」：
+       不用索引——首/末篇文章可能只有一张卡，且标签语义与时间顺序相反
+       （主题的「上一篇」= 更新的文章，「下一篇」= 更早的文章） */
+    var prevCard = null, nextCard = null;
+    cards.forEach(function (c) {
+      var labelEl = $('.info-item-1', c);
+      var label = labelEl ? labelEl.textContent : '';
+      if (label.indexOf('上一篇') !== -1) { prevCard = c; }
+      else if (label.indexOf('下一篇') !== -1) { nextCard = c; }
+    });
+    if (!prevCard && !nextCard) { return; }
+
+    /* 当前文章所属叶子分类（文章页元信息里的分类链接，取最后一个） */
+    var catLinks = $$('.post-meta-categories');
+    if (!catLinks.length) { catLinks = $$('.article-meta__categories'); }
+    var leaf = catLinks.length ? catLinks[catLinks.length - 1].textContent.trim() : '';
+    var currentPath = pathname.replace(ROOT, '');
+
+    fetch(ROOT + '/js/learn-order.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        var order = (leaf && data[leaf]) ? data[leaf] : [];
+
+        if (!order.length) {
+          /* 无分类的文章（如开张贴）：收起翻页卡，换成「回到学习地图」入口 */
+          if (prevCard) { prevCard.style.display = 'none'; }
+          if (nextCard) { nextCard.style.display = 'none'; }
+          nav.style.display = 'none';
+          var cta = el('div', 'lm-post-cta');
+          cta.innerHTML =
+            '<div class="lm-post-cta-label">这是博客的开篇，不属于任何学习模块</div>' +
+            '<a class="lm-post-cta-link" href="' + ROOT + '/">回到学习地图，从第 1 篇开始读 →</a>';
+          nav.parentNode.insertBefore(cta, nav);
+          return;
+        }
+
+        var idx = -1;
+        for (var i = 0; i < order.length; i++) {
+          if (order[i].u === currentPath || order[i].u === currentPath + '/') { idx = i; break; }
+        }
+        if (idx === -1) { return; } /* 不在列表里，保持主题原样 */
+
+        /* 学习顺序：上一篇 = 顺序中的前一篇（更早），下一篇 = 后一篇（更晚） */
+        var prev = idx > 0 ? order[idx - 1] : null;
+        var next = idx < order.length - 1 ? order[idx + 1] : null;
+
+        if (prevCard) {
+          if (prev) { fillNavCard(prevCard, prev); } else { prevCard.style.display = 'none'; }
+        }
+        if (nextCard) {
+          if (next) { fillNavCard(nextCard, next); } else { nextCard.style.display = 'none'; }
+        }
+
+        /* 两张卡都收起时，整个翻页区一并隐藏 */
+        var prevGone = !prevCard || prevCard.style.display === 'none';
+        var nextGone = !nextCard || nextCard.style.display === 'none';
+        if (prevGone && nextGone) { nav.style.display = 'none'; }
+      })
+      .catch(function () { /* JSON 加载失败时保持主题默认行为 */ });
+  }
+
+  /* ---------- 分类总览页：置顶「开篇」卡片 ---------- */
+  function initCategoriesIndex() {
+    var main = $('#content-inner');
+    if (!main) { return; }
+    var card = el('div', 'lm-intro-card');
+    card.innerHTML =
+      '<div class="lm-intro-kicker">开篇 · 置顶</div>' +
+      '<a class="lm-intro-title" href="' + ROOT + '/2026/10/16/hello-my-learning-blog/">开张：从今天开始记录我的 AI 学习之路</a>' +
+      '<p class="lm-intro-desc">为什么建这个博客、打算怎么写 —— 开始学习之前，先花两分钟了解这里的背景。</p>' +
+      '<a class="lm-intro-go" href="' + ROOT + '/2026/10/16/hello-my-learning-blog/">读这篇 →</a>';
+    main.insertBefore(card, main.firstChild);
+  }
+
+  /* ============================================================
      启动
      ============================================================ */
   if (isPostPage) {
     markVisited(pathname);
+    initPostNav();
   } else if (isHome) {
     initHome();
   } else if (leafCatMatch) {
@@ -487,5 +583,9 @@
       sub: '按时间归档',
       note: '<b>全部文章</b> · 按发布时间倒序排列'
     });
+  } else if (isCategoriesIndex) {
+    /* 分类总览页：置顶开篇文章 */
+    document.documentElement.classList.add('lm-list');
+    initCategoriesIndex();
   }
 })();

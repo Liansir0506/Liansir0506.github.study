@@ -54,7 +54,8 @@ html.lm-list #content-inner {
 
 html.lm-list #category,
 html.lm-list #tag,
-html.lm-list #archive {
+html.lm-list #archive,
+html.lm-list #page {
   max-width: 900px;
   margin: 0 auto;
 }
@@ -762,6 +763,96 @@ html.lm-list .article-sort-item-title {
 .article-sort-item.lm-flash {
   animation: lm-flash 1.2s ease;
   border-radius: 8px;
+}
+
+/* ============================================================
+   文章页：分类内上一篇/下一篇（单卡时 flex:1 自动占满）
+   ============================================================ */
+.lm-post-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 150px;
+  margin-top: 40px;
+  border-radius: 6px;
+  background: var(--lm-accent-soft);
+  border: 1px solid var(--hr-border);
+}
+
+.lm-post-cta-label {
+  font-size: 13px;
+  color: var(--card-meta);
+}
+
+.lm-post-cta-link {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--lm-accent-deep);
+  text-decoration: none;
+}
+
+html[data-theme='dark'] .lm-post-cta-link {
+  color: var(--lm-accent);
+}
+
+.lm-post-cta-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- 分类总览页：置顶开篇卡片 ---------- */
+.lm-intro-card {
+  margin: 0 0 20px;
+  padding: 18px 20px;
+  background: var(--lm-accent-soft);
+  border: 1px solid var(--hr-border);
+  border-radius: var(--border-radius-lg);
+}
+
+.lm-intro-kicker {
+  font-size: 12px;
+  color: var(--lm-accent-deep);
+  margin-bottom: 8px;
+}
+
+html[data-theme='dark'] .lm-intro-kicker {
+  color: var(--lm-accent);
+}
+
+.lm-intro-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--font-color);
+  text-decoration: none;
+}
+
+.lm-intro-title:hover {
+  color: var(--lm-accent);
+}
+
+.lm-intro-desc {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--card-meta);
+}
+
+.lm-intro-go {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--lm-accent-deep);
+  text-decoration: none;
+}
+
+html[data-theme='dark'] .lm-intro-go {
+  color: var(--lm-accent);
+}
+
+.lm-intro-go:hover {
+  text-decoration: underline;
 }
 
 /* ============================================================
